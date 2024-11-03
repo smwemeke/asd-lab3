@@ -37,7 +37,6 @@ public class Address {
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", zip=" + zip +
-                ", publisher=" + publisher +
                 '}';
     }
 }

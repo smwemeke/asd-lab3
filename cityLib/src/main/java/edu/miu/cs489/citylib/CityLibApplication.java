@@ -5,6 +5,7 @@ import edu.miu.cs489.citylib.model.Author;
 import edu.miu.cs489.citylib.model.Book;
 import edu.miu.cs489.citylib.model.Publisher;
 import edu.miu.cs489.citylib.repository.PublisherRepository;
+import edu.miu.cs489.citylib.service.AddressService;
 import edu.miu.cs489.citylib.service.AuthorService;
 import edu.miu.cs489.citylib.service.BookService;
 import edu.miu.cs489.citylib.service.PublisherService;
@@ -14,7 +15,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -24,6 +24,7 @@ public class CityLibApplication {
     private final PublisherService publisherService;
     private final AuthorService authorService;
     private final BookService bookService;
+    private final AddressService addressService;
 
     public static void main(String[] args) {
         SpringApplication.run(CityLibApplication.class, args);}
@@ -31,33 +32,23 @@ public class CityLibApplication {
         @Bean
         CommandLineRunner commandLineRunner() {
             return args -> {
-//                // Create Publisher Object
-//                Publisher publisher = new Publisher();
-//                publisher.setPublisherName("Apres");
-//
-//                // Create Address Object
-//                Address address = new Address("146 E", "Draper", "UT", 84020);
-//
-//                // Set address in publisher
-//                publisher.setPrimaryAddress(address);
-//                Publisher savedPublisher = publisherRepository.save(publisher);
-//                System.out.println(savedPublisher + "is saved");
-//
-//                // Find publisher by name
-//                publisherRepository.findByPublisherName("Apres").ifPresent(
-//                        publisher1 -> {
-//                            System.out.println("Publisher " + publisher1.getPublisherName() + "is found.");
-//                        }
-//                );
-//                // Delete Publisher
-//            };
-                // Create Books
+
+                Address address1 = new Address("146E", "Draper", "UT", 84020);
+                Publisher publisher1 = new Publisher();
+                publisher1.setPublisherName("Apres");
+                publisher1.setPrimaryAddress(address1);
+                publisherService.addNewPublisher(publisher1);
+
+                // Create Address Object
+                addressService.addNewAddress(address1);
+
+                // 1. Create Books
                 Book book1 = new Book("Java1");
                 Book book2 = new Book("Microservices");
                 book1.setISBN("123567");
                 book2.setISBN("6979585");
 
-                // Set exisiting publisher for newly created books
+                // 2. Set exisiting publisher for newly created books
                 publisherService.findByPublisherName("Apres")
                         .ifPresent(
                                 publisher -> {
@@ -71,33 +62,31 @@ public class CityLibApplication {
                                 }
                         );
 
-                // Create a few authors
-                List<Author> authorList = List.of(
+                //3. Create a few authors
+                List<Author> authors = List.of(
                         new Author("Damien", "Kato"),
                         new Author("Sue", "Mwemeke"),
                         new Author("Alvin", "Murungi"),
                         new Author("Aaron", "Ddembe")
 
                 );
-                // Save Authors
-                for (Author author : authorList) {
+                // 4. Save Authors
+                for (Author author : authors) {
                     authorService.addNewAuthor(author);
                 }
 
-                // Set multiple authors for every book
-                book1.getAuthors().add(authorList.get(0));
-                book1.getAuthors().add(authorList.get(1));
+                // 5. Set multiple authors for every book
+                book1.setAuthors(authors);
+                book2.setAuthors(authors);
 
-                book2.getAuthors().add(authorList.get(2));
-                book2.getAuthors().add(authorList.get(3));
+               // book2.getAuthors().add(authorList.get(3));
 
-                // Save Book
+                // 6. Save Book
                 bookService.addNewBook(book1);
                 bookService.addNewBook(book2);
 
-
-                // Print book
-                bookService.findBookByISBN("123567").ifPresent(System.out ::println);
+                //7.  Print book with title, isbn, authors, publisher details
+               bookService.findBookByISBN("123567").ifPresent(System.out ::println);
 
             };
         }

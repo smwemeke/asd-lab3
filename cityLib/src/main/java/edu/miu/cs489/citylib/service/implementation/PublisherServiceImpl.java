@@ -4,6 +4,7 @@ import edu.miu.cs489.citylib.model.Address;
 import edu.miu.cs489.citylib.model.Publisher;
 import edu.miu.cs489.citylib.repository.PublisherRepository;
 import edu.miu.cs489.citylib.service.PublisherService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

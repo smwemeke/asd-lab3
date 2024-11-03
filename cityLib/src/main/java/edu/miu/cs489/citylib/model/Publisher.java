@@ -15,10 +15,13 @@ import java.util.List;
 public class Publisher {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "publisher_id")
     private Integer publisherId;
+
     @Column(name = "publisher_name")
     private String publisherName;
-    @OneToOne(cascade = CascadeType.ALL)
+
+    @OneToOne(cascade = CascadeType.ALL, fetch =  FetchType.EAGER)
     @JoinColumn(name= "address_id")
     private Address primaryAddress;
 
@@ -28,6 +31,9 @@ public class Publisher {
     public Publisher(String publisherName, Address primaryAddress) {
         this.publisherName = publisherName;
         this.primaryAddress = primaryAddress;
+    }
+    public Publisher(String publisherName){
+        this.publisherName = publisherName;
     }
     @Override
     public String toString(){
